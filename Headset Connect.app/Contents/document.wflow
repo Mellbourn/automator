@@ -51,7 +51,7 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>source</key>
-					<string>tell application "System Events"	tell its application process "ControlCenter"		set bluetoothStatusIcon to (first menu bar item whose title is "Bluetooth") of menu bar 1		click bluetoothStatusIcon				set bluetoothWindow to window 1		set group1 to group 1 of bluetoothWindow		set scrollArea1 to scroll area 1 of group1				my makeSureHeadsetIsBluetoothConnected(scrollArea1)				set noiseCancellationToggleButton to checkbox "Noise Cancellation" of scrollArea1		tell noiseCancellationToggleButton to click				tell bluetoothStatusIcon to click	end tellend tellon makeSureHeadsetIsBluetoothConnected(scrollArea1)	tell application "System Events"		tell its application process "ControlCenter"			set airPodsMaxToggleButton to (first checkbox whose title contains "AirPods Max") of scrollArea1			set onoff to (value of airPodsMaxToggleButton)			if (onoff = 0) then				click airPodsMaxToggleButton				set endDate to (current date) + 20				repeat					if ((value of airPodsMaxToggleButton) &gt; 0) then						exit repeat					end if					if ((current date) &gt; endDate) then						error "Failed to connect to headset via bluetooth"					end if					delay 0.1				end repeat			end if		end tell	end tellend makeSureHeadsetIsBluetoothConnected</string>
+					<string>tell application "System Events"	tell its application process "ControlCenter"		set bluetoothStatusIcon to (first menu bar item whose title is "Bluetooth") of menu bar 1		click bluetoothStatusIcon				set bluetoothWindow to window 1		set group1 to group 1 of bluetoothWindow		set scrollArea1 to scroll area 1 of group1				my makeSureHeadsetIsBluetoothConnected(scrollArea1)				set noiseCancellationToggleButton to checkbox "Noise Cancellation" of scrollArea1		tell noiseCancellationToggleButton to click				tell bluetoothStatusIcon to click	end tellend tellon makeSureHeadsetIsBluetoothConnected(scrollArea1)	tell application "System Events"		tell its application process "ControlCenter"			set airPodsMaxToggleButton to (first checkbox whose title contains "AirPods Max") of scrollArea1			set onoff to (value of airPodsMaxToggleButton)			if (onoff = 0) then				click airPodsMaxToggleButton				set endDate to (current date) + 20				repeat					if ((value of airPodsMaxToggleButton) &gt; 0) then						exit repeat					end if					if ((current date) &gt; endDate) then						error "Failed to connect to headset via bluetooth"					end if					delay 0.1				end repeat				-- to be able to safely switch to "Noise Cancellation" after activating bluetooth				-- you cannot *immediately* proceed to clicking it (it won't take)				delay 1			end if		end tell	end tellend makeSureHeadsetIsBluetoothConnected</string>
 				</dict>
 				<key>BundleIdentifier</key>
 				<string>com.apple.Automator.RunScript</string>
@@ -105,7 +105,7 @@ end run</string>
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>449.000000:684.000000</string>
+				<string>449.000000:1157.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
