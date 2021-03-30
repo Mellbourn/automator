@@ -735,10 +735,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			D9jn+FIwZy7P5fIWm3atoXDrtSY=
+			JdiXO7uBePJOpgx4bABfPpfH9EU=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"4396210bb32151314ec716600174786aa8d79257" or cdhash H"0fd8e7f85230672ecfe5f2169b76ada170ebb526"</string>
+			<string>cdhash H"22fc01d87b5ede5a2ee56c653e5441b7455d2835" or cdhash H"25d8973bbb8178f24ea60c786c005f3e97c7f445"</string>
 		</dict>
 	</dict>
 	<key>rules</key>
