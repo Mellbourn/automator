@@ -34,11 +34,11 @@
 	<key>CFBundleIconFile</key>
 	<string>ApplicationStub</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.automator.Connect-vpn</string>
+	<string>com.apple.automator.Connect-VPN</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Connect vpn</string>
+	<string>Connect VPN</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

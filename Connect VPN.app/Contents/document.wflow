@@ -51,7 +51,7 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>source</key>
-					<string>on run	-- Click the menu bar item.	set timeoutSeconds to 2.0	set uiScript to "click menu bar item 1 of menu bar 2 of application process \"GlobalProtect\""	my doWithTimeout(uiScript, timeoutSeconds)		-- Click the “Connect” button.	-- delay 0.5	set uiScript to "click button \"Connect\" of window 1 of application process \"GlobalProtect\""	my doWithoutError(uiScript)		-- close window	delay 3	set uiScript to "click menu bar item 1 of menu bar 2 of application process \"GlobalProtect\""	my doWithTimeout(uiScript, timeoutSeconds)end runon doWithoutError(uiScript)	try		run script "tell application \"System Events\"" &amp; uiScript &amp; "end tell"	on error errorMessage		-- ignore since it may already be connected	end tryend doWithoutErroron doWithTimeout(uiScript, timeoutSeconds)	set endDate to (current date) + timeoutSeconds	repeat		try			run script "tell application \"System Events\"" &amp; uiScript &amp; "end tell"			exit repeat		on error errorMessage			if ((current date) &gt; endDate) then				error "Can not " &amp; uiScript			end if		end try	end repeatend doWithTimeout</string>
+					<string>on run	-- Click the menu bar item.	set timeoutSeconds to 2.0	set uiScript to "click menu bar item 1 of menu bar 2 of application process \"GlobalProtect\""	try		my doWithTimeout(uiScript, timeoutSeconds)	on error errorMessage		-- quietly exit if we can't find the GlobalProtect VPN		return	end try		-- Click the “Connect” button.	-- delay 0.5	set uiScript to "click button \"Connect\" of window 1 of application process \"GlobalProtect\""	my doWithoutError(uiScript)		-- close window	delay 3	set uiScript to "click menu bar item 1 of menu bar 2 of application process \"GlobalProtect\""	my doWithTimeout(uiScript, timeoutSeconds)end runon doWithError(uiScript)	run script "tell application \"System Events\"" &amp; uiScript &amp; "end tell"end doWithErroron doWithoutError(uiScript)	try		run script "tell application \"System Events\"" &amp; uiScript &amp; "end tell"	on error errorMessage		-- ignore since it may already be connected	end tryend doWithoutErroron doWithTimeout(uiScript, timeoutSeconds)	set endDate to (current date) + timeoutSeconds	repeat		try			run script "tell application \"System Events\"" &amp; uiScript &amp; "end tell"			exit repeat		on error errorMessage			if ((current date) &gt; endDate) then				error "Can not " &amp; uiScript			end if		end try	end repeatend doWithTimeout</string>
 				</dict>
 				<key>BundleIdentifier</key>
 				<string>com.apple.Automator.RunScript</string>
@@ -105,7 +105,7 @@ end run</string>
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>416.500000:992.000000</string>
+				<string>449.000000:859.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
