@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>AMApplicationBuild</key>
-	<string>509</string>
+	<string>520</string>
 	<key>AMApplicationVersion</key>
 	<string>2.10</string>
 	<key>AMDocumentVersion</key>
@@ -51,7 +51,7 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>source</key>
-					<string>on run	set headSet to "AirPods Max"	set standaloneMic to "Yeti Nano"		my connectBluetoothHeadset()		my configureSound(headSet)		-- my soundEffects(headSet)		-- set processorArchitecture to do shell script "uname -p"	-- if (processorArchitecture is "arm") then	-- M1 is quiet enough to use external microphone, otherwise too much fan noiseCancellationToggleButton	-- my useMic(standaloneMic)	-- else	my useMic(headSet)	-- end ifend runon connectBluetoothHeadset()	tell application "System Events"		tell its application process "ControlCenter"			set bluetoothStatusIcon to (first menu bar item whose title is "Bluetooth") of menu bar 1			click bluetoothStatusIcon						set bluetoothWindow to window 1			set group1 to group 1 of bluetoothWindow			set scrollArea1 to scroll area 1 of group1						my makeSureHeadsetIsBluetoothConnected(scrollArea1)						set noiseCancellationToggleButton to checkbox "Noise Cancellation" of scrollArea1			tell noiseCancellationToggleButton to click						tell bluetoothStatusIcon to click		end tell	end tellend connectBluetoothHeadseton makeSureHeadsetIsBluetoothConnected(scrollArea1)	tell application "System Events"		tell its application process "ControlCenter"			set headsetToggleButton to (first checkbox whose title contains "AirPods Max") of scrollArea1			set onoff to (value of headsetToggleButton)			if (onoff = 0) then				click headsetToggleButton				set endDate to (current date) + 20				repeat					if ((value of headsetToggleButton) &gt; 0) then						exit repeat					end if					if ((current date) &gt; endDate) then						error "Failed to connect to headset via bluetooth"					end if					delay 0.1				end repeat				-- to be able to safely switch to "Noise Cancellation" after activating bluetooth				-- you cannot *immediately* proceed to clicking it (it won't take)				delay 1			end if		end tell	end tellend makeSureHeadsetIsBluetoothConnectedon configureSound(outputName)	tell application "System Events"		tell its application process "ControlCenter"			set soundStatusIcon to (first menu bar item whose title is "Sound") of menu bar 1			click soundStatusIcon						set soundWindow to window 1			set group1 to group 1 of soundWindow			set scrollArea1 to scroll area 1 of group1						set headsetToggleButton to (first checkbox whose title contains outputName) of scrollArea1			tell headsetToggleButton to click						tell soundStatusIcon to click		end tell	end tellend configureSoundon useMic(micName)	tell application "System Preferences"		activate		set current pane to pane id "com.apple.preference.sound"		-- this delay necessary to allow for tab change		delay 0.4		tell application "System Events"			set tabGroup1 to tab group 1 of window "Sound" of application process "System Preferences"			set inputTab to radio button 3 of tabGroup1			tell inputTab to click			set table1 to table 1 of scroll area 1 of tabGroup1						tell table1				select (row 1 where value of text field 1 contains micName)				-- hypothesis: this delay will ensure that the setting "takes"?				delay 0.8			end tell		end tell		quit	end tellend useMicon soundEffects(effectsThrough)	tell application "System Preferences"		activate		set current pane to pane id "com.apple.preference.sound"		-- this delay necessary to allow for tab change		delay 0.4		tell application "System Events"			set tabGroup1 to tab group 0 of window "Sound" of application process "System Preferences"			set soundEffectsTab to radio button 1 of tabGroup1			tell soundEffectsTab to click			set popupButton to pop up button 1 of tabGroup1			tell popupButton to click			click (menu items of menu 1 of popupButton ¬				whose name contains effectsThrough)		end tell		quit	end tellend soundEffects</string>
+					<string>on run	set headSet to "AirPods Max"	set standaloneMic to "Yeti Nano"		my connectBluetoothHeadset()		my configureSound(headSet)		--my soundEffects(headSet)		-- set processorArchitecture to do shell script "uname -p"	-- if (processorArchitecture is "arm") then	-- M1 is quiet enough to use external microphone, otherwise too much fan noiseCancellationToggleButton	-- my useMic(standaloneMic)	-- else	my useMic(headSet)	-- end ifend runon connectBluetoothHeadset()	tell application "System Events"		tell its application process "ControlCenter"			set bluetoothStatusIcon to (first menu bar item whose title is "Bluetooth") of menu bar 1			click bluetoothStatusIcon						set bluetoothWindow to window 1			set group1 to group 1 of bluetoothWindow			set scrollArea1 to scroll area 1 of group1						my makeSureHeadsetIsBluetoothConnected(scrollArea1)						set noiseCancellationToggleButton to checkbox "Noise Cancellation" of scrollArea1			tell noiseCancellationToggleButton to click						tell bluetoothStatusIcon to click		end tell	end tellend connectBluetoothHeadseton makeSureHeadsetIsBluetoothConnected(scrollArea1)	tell application "System Events"		tell its application process "ControlCenter"			set headsetToggleButton to (first checkbox whose title contains "AirPods Max") of scrollArea1			set onoff to (value of headsetToggleButton)			if (onoff = 0) then				click headsetToggleButton				set endDate to (current date) + 20				repeat					if ((value of headsetToggleButton) &gt; 0) then						exit repeat					end if					if ((current date) &gt; endDate) then						error "Failed to connect to headset via bluetooth"					end if					delay 0.1				end repeat				-- to be able to safely switch to "Noise Cancellation" after activating bluetooth				-- you cannot *immediately* proceed to clicking it (it won't take)				delay 1			end if		end tell	end tellend makeSureHeadsetIsBluetoothConnectedon configureSound(outputName)	tell application "System Events"		tell its application process "ControlCenter"			set soundStatusIcon to (first menu bar item whose title is "Sound") of menu bar 1			click soundStatusIcon						set soundWindow to window 1			set group1 to group 1 of soundWindow			set scrollArea1 to scroll area 1 of group1						set headsetToggleButton to (first checkbox whose title contains outputName) of scrollArea1			tell headsetToggleButton to click						tell soundStatusIcon to click		end tell	end tellend configureSoundon useMic(micName)	tell application "System Settings"		activate		set current pane to pane id "com.apple.preference.sound"		-- this delay necessary to allow for tab change		delay 0.4		tell application "System Events"			set tabGroup1 to tab group 1 of window "Sound" of application process "System Preferences"			set inputTab to radio button 3 of tabGroup1			tell inputTab to click			set table1 to table 1 of scroll area 1 of tabGroup1						tell table1				select (row 1 where value of text field 1 contains micName)				-- hypothesis: this delay will ensure that the setting "takes"?				delay 0.8			end tell		end tell		quit	end tellend useMicon soundEffects(effectsThrough)	tell application "System Settings"		activate		set current pane to pane id "com.apple.preference.sound"		-- this delay necessary to allow for tab change		delay 0.4		tell application "System Events"			set tabGroup1 to tab group 0 of window "Sound" of application process "System Preferences"			set soundEffectsTab to radio button 1 of tabGroup1			tell soundEffectsTab to click			set popupButton to pop up button 1 of tabGroup1			tell popupButton to click			click (menu items of menu 1 of popupButton ¬				whose name contains effectsThrough)		end tell		quit	end tellend soundEffects</string>
 				</dict>
 				<key>BundleIdentifier</key>
 				<string>com.apple.Automator.RunScript</string>
@@ -105,16 +105,730 @@ end run</string>
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>449.000000:315.000000</string>
+				<string>449.000000:943.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
 			<key>isViewVisible</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>*</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>playbackSpeed</key>
+					<dict/>
+					<key>playbackSpeed_MAX</key>
+					<dict/>
+					<key>playbackSpeed_MIN</key>
+					<dict/>
+					<key>timeoutCount</key>
+					<dict/>
+					<key>timeoutCount_MAX</key>
+					<dict/>
+					<key>timeoutCount_MIN</key>
+					<dict/>
+					<key>timeoutIsError</key>
+					<dict/>
+					<key>timeoutPerEvent</key>
+					<dict/>
+					<key>userEvents</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>*</string>
+					</array>
+				</dict>
+				<key>AMRequiredResources</key>
+				<array/>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Watch Me Do.action</string>
+				<key>ActionName</key>
+				<string>Watch Me Do</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>playbackSpeed</key>
+					<real>0.0</real>
+					<key>playbackSpeed_MAX</key>
+					<real>1</real>
+					<key>playbackSpeed_MIN</key>
+					<real>-1</real>
+					<key>timeoutCount</key>
+					<real>2</real>
+					<key>timeoutCount_MAX</key>
+					<real>1000</real>
+					<key>timeoutCount_MIN</key>
+					<real>0.0</real>
+					<key>timeoutIsError</key>
+					<true/>
+					<key>timeoutPerEvent</key>
+					<true/>
+					<key>userEvents</key>
+					<data>
+					YnBsaXN0MDDUAAEAAgADAAQABQAGAAcAClgk
+					dmVyc2lvblkkYXJjaGl2ZXJUJHRvcFgkb2Jq
+					ZWN0cxIAAYagXxAPTlNLZXllZEFyY2hpdmVy
+					0QAIAAlUcm9vdIABrxEBCAALAAwAEwAjACQA
+					JQAmACcAKAAtADEAPgA/AEAAQQBCAEgASwBf
+					AGAAYQBiAGMAZABlAGYAZwBoAGkAagBrAGwA
+					bQBzAHcAegCSAJMAlACVAJYAlwCYAJkAmgCi
+					AKMApAClAKYApwCoAKkAsQCyALMAuwC8AL0A
+					vgC/AMcAyADJAMoA0gDVAPsA/AD9AP4A/wEA
+					AQEBAgEDAQQBDAENAQ4BDwEXAR8BIAEhASkB
+					KgErASwBNAE8AT0BPgE/AUABSAFJAUoBSwFP
+					AVABUQFWAVkBZQFrAW4BggGDAYQBhQGGAYcB
+					igGiAaMBqwGsAbQBvAHEAcUBzQHQAfYB9wH4
+					AfkB+gH7AfwCBAIMAhQCHAIkAiwCLQI1AjYC
+					NwI4AjkCOwI/AkwCTQJOAk8CVAJXAmMCagJt
+					AoECggKDAoQChQKIAqwCrQKuAq8CsAKxArIC
+					ugLCAsMCywLMAs0CzgLWAtcC3wLgAuEC6QLq
+					AusC7gMGAwcDCAMJAxEDEgMTAxQDHAMkAyUD
+					JgMuAy8DNwM6A1gDWQNaA1sDYwNrA2wDbQN1
+					A3YDdwN/A4ADgQOJA4oDiwOMA40DjgORA50D
+					pAOnA7sDvAO9A74DvwPCA+YD5wPoA+kD8QP5
+					BAEECQQRBBIEGgQbBBwEHwQ3BDgEOQRBBEkE
+					UQRZBGEEZASCBIMEhASFBI0ElQSdBKUEpgSu
+					BK8EsFUkbnVsbNIADQAOAA8AElpOUy5vYmpl
+					Y3RzViRjbGFzc6IAEAARgAKAkICO2AAUAA4A
+					FQAWABcAGAAZABoAGwAcAB0AHgAfACAAIQAi
+					WHVpRXZlbnRzXxARc2NyZWVuQ2FwdHVyZURh
+					dGFXdGltZW91dFVkZWxheVtwcm9jZXNzTmFt
+					ZV8QD3VzZXJEZXNjcmlwdGlvblphY3Rpb25O
+					YW1lgAiAj4AAgAeABoAEgAWAA11Nb3VzZSBD
+					bGlja2VkXkNvbnRyb2wgQ2VudHJlXxAYQ2xp
+					Y2sgdGhlIG1lbnUgYmFyIGl0ZW0uI0AJsrTQ
+					AAAAI0AAAAAAAAAA0gANAA4AKQASogAqACuA
+					CYBmgI7SAC4ADgAvADBacHJvcGVydGllc4AK
+					gGXTADIADQAOADMAOAA9V05TLmtleXOkADQA
+					NQA2ADeAC4AMgA2ADqQAOQA6ACAAPIAPgGOA
+					BIBkgCBdY2hpbGRyZW5TdGFja1tjZ0V2ZW50
+					RGF0YVtwcm9jZXNzTmFtZV8QF2Rlc2NyaXB0
+					aW9uRm9ybWF0U3RyaW5n0gANAA4AQwBHowBE
+					AEUARoAQgCKAQYBi0gAuAA4ASQBKgBGAIdMA
+					MgANAA4ATABVAD2oAE0ATgBPAFAAUQBSAFMA
+					VIASgBOAFIAVgBaAF4AYgBmoAFYAVwBYAFkA
+					WgBbAFgAWIAagBuAHIAdgB6AH4AcgByAIFZB
+					WFJvbGVfEBJDRkJ1bmRsZUlkZW50aWZpZXJY
+					QVhIaWRkZW5XQVhUaXRsZV8QEUFYUm9sZURl
+					c2NyaXB0aW9uXxAXa1VJRWxlbWVudENoaWxk
+					cmVuQ291bnRfEBdBWEVuaGFuY2VkVXNlcklu
+					dGVyZmFjZVtBWEZyb250bW9zdF1BWEFwcGxp
+					Y2F0aW9uXxAXY29tLmFwcGxlLmNvbnRyb2xj
+					ZW50ZXIIXkNvbnRyb2wgQ2VudHJlW2FwcGxp
+					Y2F0aW9uEAHSAG4AbwBwAHFaJGNsYXNzbmFt
+					ZVgkY2xhc3Nlc1xOU0RpY3Rpb25hcnmiAHAA
+					clhOU09iamVjdNIAbgBvAHQAdV8QHVVJUkFj
+					Y2Vzc2liaWxpdHlFbGVtZW50UmVjb3JkogB2
+					AHJfEB1VSVJBY2Nlc3NpYmlsaXR5RWxlbWVu
+					dFJlY29yZNIALgAOAHgASoAjgCHTADIADQAO
+					AHsAhgA9qgB8AE0AfgB/AIAAgQBSAIMAhACF
+					gCSAEoAlgCaAJ4AogBeAKYAqgCuqAIcAiACJ
+					AIoAiwBYAI0AjgCOAJCALIAxgDKAM4A0gByA
+					PoA/gD+AQIAgVkFYU2l6ZVlBWEVuYWJsZWRf
+					EBFBWFJvbGVEZXNjcmlwdGlvbldBWEZyYW1l
+					WUFYRm9jdXNlZF8QD2tVSUVsZW1lbnRJbmRl
+					eF8QE2tVSUVsZW1lbnRSb2xlSW5kZXhaQVhQ
+					b3NpdGlvbtMAMgANAA4AmwCeAD2iAJwAnYAt
+					gC6iAJ8AoIAvgDCAIFV3aWR0aFZoZWlnaHQj
+					QEdAAAAAAAAjQDgAAAAAAABZQVhNZW51QmFy
+					CVhtZW51IGJhctMAMgANAA4AqgCtAD2iAKsA
+					rIA1gDaiAK4Ar4A3gDyAIFZvcmlnaW5Uc2l6
+					ZdMAMgANAA4AtAC3AD2iALUAtoA4gDmiALgA
+					uYA6gDuAIFF4UXkjwKxiAAAAAAAjv/AAAAAA
+					AADTADIADQAOAMAAwwA9ogCcAJ2ALYAuogDE
+					AKCAPYAwgCAjQEdAAAAAAAAQBhAA0wAyAA0A
+					DgDLAM4APaIAtQC2gDiAOaIAuAC5gDqAO4Ag
+					0gAuAA4A0wBKgEKAIdMAMgANAA4A1gDoAD2v
+					EBEA1wDYAH4AgACEAHwAgQDeAE0A4ACFAFAA
+					gwDkAOUA5gDngEOARIAlgCeAKoAkgCiARYAS
+					gEaAK4AVgCmAR4BIgEmASq8QEQDpAOoAiQDs
+					AO0A7gBYAPAA8QDyAPMA9ADtAPYAWAD4AFiA
+					S4BMgDKAUIBXgFiAHIBZgFyAXYBegF+AV4Bg
+					gByAYYAcgCBcQVhJZGVudGlmaWVyXxAXQVhW
+					aXNpYmxlQ2hhcmFjdGVyUmFuZ2VfEBFBWEFj
+					dGl2YXRpb25Qb2ludFdBWFZhbHVlXxARQVhS
+					b2xlRGVzY3JpcHRpb25aQVhTZWxlY3RlZFlB
+					WFN1YnJvbGVcQVhEaXNjbG9zaW5nXxAZY29t
+					LmFwcGxlLm1lbnVleHRyYS5zb3VuZNMAMgAN
+					AA4BBQEIAD2iAQYBB4BNgE6iAI4BCoA/gE+A
+					IFhsb2NhdGlvblZsZW5ndGgQBNMAMgANAA4B
+					EAETAD2iAKsArIA1gDaiARQBFYBRgFSAINMA
+					MgANAA4BGAEbAD2iALUAtoA4gDmiARwBHYBS
+					gFOAICNAnaQAAAAAACM/8AAAAAAAANMAMgAN
+					AA4BIgElAD2iAJwAnYAtgC6iASYBJ4BVgFaA
+					ICNANAAAAAAAACNANgAAAAAAABAF0wAyAA0A
+					DgEtATAAPaIAnACdgC2ALqIBJgEngFWAVoAg
+					0wAyAA0ADgE1ATgAPaIAtQC2gDiAOaIBOQE6
+					gFqAW4AgI0CdzAAAAAAAI0AoAAAAAAAAXUFY
+					TWVudUJhckl0ZW1kADYANwCgACXTADIADQAO
+					AUEBRAA9ogC1ALaAOIA5ogEcAR2AUoBTgCBV
+					U291bmRabWVudSBleHRyYVtBWE1lbnVFeHRy
+					YdIAbgBvAUwBTV5OU011dGFibGVBcnJheaMB
+					TAFOAHJXTlNBcnJheU8RApQAAAACAAFANQAA
+					AAMAAUA2AAAAAAABQDcAAAABAALAOETuTEBB
+					ZhAAAALAOUGLEABBZhAAAAEAOr4oNSYAAAL3
+					AAFAOwAAAAAAAUAzAAAAcgABQDQABX0vAAEA
+					qTvXYQEAAAASAAFAagAAABgAAUBrAAAFoAGM
+					EG0BYdc7EgAAAKoJAAABAAAAAAAAAAAAAAAE
+					AAAAIAAAABEAAAAAAAAAAAAAAAAAAAAAAAAA
+					AAAAAAEAAAAgAAAAAgAAAAEAAAABAAAAAQAA
+					AAAAAQABAQAAAQAAAJgAAAABAAAAAQAAAAEA
+					AAAA/xgAAAAAAHwAAAAOAAAAAAAAAAAAAAAB
+					Ydc7EgAAAAAAAAAAAAAAqgkAAAEAAAAAAAAA
+					AAAHAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					AAAAmAAAAAEAAAABAAAAAQAAAAD/GAAAAAAA
+					fAAAAAEAAAAAAAAAAAAAAAFh1zsSAAAAAAAA
+					AAAAAACqCQAAAQAAAAAAAAAAAPAAAQAAAP8A
+					AwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAHAAAA
+					AwABQAAAAADwAAFAAQAAAAEAAUACAAAA/wAB
+					QAMAAAAAAAFABAAAAAAAAUAFAAAAAAABQAYA
+					AAAAAAFAWQAAAGIAAUBaAAAAYQABQFsAAABy
+					AAFAXAAAAHIAAUBsAAAAAQABQDwAAADwAAEA
+					PQAAAAAAAAAAAAEAPgAAAAAAAAAAAAFAPwAA
+					AABfEDMlQCBvbiBtZW51IGJhciBpdGVtIFxV
+					MjAxQ1NvdW5kXFUyMDFEIGluIG1lbnUgYmFy
+					IDHSAG4AbwFSAVNdVUlSTW91c2VFdmVudKMB
+					VAFVAHJdVUlSTW91c2VFdmVudFhVSVJFdmVu
+					dNIALgAOAVcAMIBngGXTADIADQAOAVoBXwA9
+					pAA0ADUANgA3gAuADIANgA6kAWABYQFiAWOA
+					aICLgIyAjYAg0gANAA4BZgBHowFnAWgBaYBp
+					gHCAeoBi0gAuAA4BbABKgGqAIdMAMgANAA4B
+					bwF4AD2oAE0ATgBPAFABdABSAXYBd4ASgBOA
+					FIAVgGuAF4BsgG2oAFYAVwBYAXwAWgF+AFgA
+					iYAagBuAHIBugB6Ab4AcgDKAIF8QEUFYUm9s
+					ZURlc2NyaXB0aW9uXxAXQVhFbmhhbmNlZFVz
+					ZXJJbnRlcmZhY2VbQVhGcm9udG1vc3ReQ29u
+					dHJvbCBDZW50cmUQAtIALgAOAYgASoBxgCHT
+					ADIADQAOAYsBlgA9qgB8AE0AfgGPAIAAgQBS
+					AIMAhACFgCSAEoAlgHKAJ4AogBeAKYAqgCuq
+					AZcAiACJAIoBmwBYAI0AWwCOAaCAc4AxgDKA
+					M4B1gByAPoAfgD+AeYAgXxARQVhSb2xlRGVz
+					Y3JpcHRpb27TADIADQAOAaQBpwA9ogCcAJ2A
+					LYAuogGoAKCAdIAwgCAjQEdAAAAAAADTADIA
+					DQAOAa0BsAA9ogCrAKyANYA2ogGxAbKAdoB3
+					gCDTADIADQAOAbUBuAA9ogC1ALaAOIA5ogC4
+					ALmAOoA7gCDTADIADQAOAb0BwAA9ogCcAJ2A
+					LYAuogHBAKCAeIAwgCAjQEdAAAAAAADTADIA
+					DQAOAcYByQA9ogC1ALaAOIA5ogC4ALmAOoA7
+					gCDSAC4ADgHOAEqAe4Ah0wAyAA0ADgHRAeMA
+					Pa8QEQHSAdMAfgCAAIQAfACBAdkATQDgAIUA
+					UACDAd8A5QDmAeKAfIB9gCWAJ4AqgCSAKIB+
+					gBKARoArgBWAKYB/gEiASYCArxARAeQB5QCJ
+					AecA7QHpAFgB6wDxAe0B7gD0AO0A9gBYAfMA
+					WICBgIKAMoCDgFeAhoAcgIeAXICIgImAX4BX
+					gGCAHICKgByAIFxBWElkZW50aWZpZXJfEBdB
+					WFZpc2libGVDaGFyYWN0ZXJSYW5nZV8QEUFY
+					QWN0aXZhdGlvblBvaW50XxARQVhSb2xlRGVz
+					Y3JpcHRpb25cQVhEaXNjbG9zaW5nXxAZY29t
+					LmFwcGxlLm1lbnVleHRyYS5zb3VuZNMAMgAN
+					AA4B/QIAAD2iAQYBB4BNgE6iAI4BCoA/gE+A
+					INMAMgANAA4CBQIIAD2iAKsArIA1gDaiAgkC
+					CoCEgIWAINMAMgANAA4CDQIQAD2iALUAtoA4
+					gDmiARwBHYBSgFOAINMAMgANAA4CFQIYAD2i
+					AJwAnYAtgC6iASYBJ4BVgFaAINMAMgANAA4C
+					HQIgAD2iAJwAnYAtgC6iASYBJ4BVgFaAINMA
+					MgANAA4CJQIoAD2iALUAtoA4gDmiATkBOoBa
+					gFuAIGQANgA3AKAAJdMAMgANAA4CLgIxAD2i
+					ALUAtoA4gDmiARwBHYBSgFOAIFtBWE1lbnVF
+					eHRyYU8RApQAAAACAAFANQAAAAMAAUA2AAAA
+					AAABQDcAAAACAALAOETuTEBBZhAAAALAOUGL
+					EABBZhAAAAEAOscP01cAAAL3AAFAOwAAAAAA
+					AUAzAAAAcgABQDQABX0vAAEAqTwM3PgAAAAS
+					AAFAagAAABgAAUBrAAAFoAGMEG343Aw8EgAA
+					AKoJAAABAAAAAAAAAAAAAAAEAAAAIAAAABEA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAg
+					AAAAAgAAAAEAAAABAAAAAAAAAAAAAAABAQAA
+					AAAAAJgAAAABAAAAAQAAAAEAAAAA/xgAAAAA
+					AHwAAAAOAAAAAAAAAAAAAAD43Aw8EgAAAAAA
+					AAAAAAAAqgkAAAEAAAAAAAAAAAAHAAEAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAmAAAAAEA
+					AAABAAAAAQAAAAD/GAAAAAAAfAAAAAIAAAAA
+					AAAAAAAAAPjcDDwSAAAAAAAAAAAAAACqCQAA
+					AQAAAAAAAAAAAPAAAQAAAAAAAwAAAAAAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					AAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAAAAUAHAAAAAwABQAAAAADw
+					AAFAAQAAAAEAAUACAAAAAAABQAMAAAAAAAFA
+					BAAAAAAAAUAFAAAAAAABQAYAAAAAAAFAWQAA
+					AGIAAUBaAAAAYQABQFsAAAByAAFAXAAAAHIA
+					AUBsAAAAAAABQDwAAADwAAEAPQAAAAAAAAAA
+					AAEAPgAAAAAAAAAAAAFAPwAAAABeQ29udHJv
+					bCBDZW50cmVfEDMlQCBvbiBtZW51IGJhciBp
+					dGVtIFxVMjAxQ1NvdW5kXFUyMDFEIGluIG1l
+					bnUgYmFyIDHSAG4AbwFOAjqiAU4ActIAbgBv
+					AjwCPV5BTVVJUlVzZXJFdmVudKICPgByXkFN
+					VUlSVXNlckV2ZW502AAUAA4CQAAWABcCQQJC
+					AkMCRAAcAB0AHgJIAkkCSgAiXxARc2NyZWVu
+					Q2FwdHVyZURhdGFbcHJvY2Vzc05hbWVfEA91
+					c2VyRGVzY3JpcHRpb25aYWN0aW9uTmFtZYCU
+					gI+AAIAHgJOAkYCSgANeQ29udHJvbCBDZW50
+					cmVvECcAQwBsAGkAYwBrACAAdABoAGUAICAc
+					AE4AbwBpAHMAZQAgAEMAYQBuAGMAZQBsAGwA
+					YQB0AGkAbwBuIB0AIAB0AGkAYwBrAGIAbwB4
+					AC4jQAM2Jic5s17SAA0ADgJQABKiAlECUoCV
+					gNqAjtIALgAOAlUAMICWgGXTADIADQAOAlgC
+					XQA9pAA0ADUANgA3gAuADIANgA6kAl4CXwJJ
+					AmGAl4DYgJGA2YAg0gANAA4CZABHpAJlAmYC
+					ZwJogJiAnoC1gMWAYtIALgAOAmsASoCZgCHT
+					ADIADQAOAm4CdwA9qABNAE4ATwBQAnMAUgJ1
+					AnaAEoATgBSAFYCagBeAm4CcqABWAFcAWAJ7
+					AFoBfgBYAImAGoAbgByAnYAegG+AHIAygCBf
+					EBFBWFJvbGVEZXNjcmlwdGlvbl8QF0FYRW5o
+					YW5jZWRVc2VySW50ZXJmYWNlW0FYRnJvbnRt
+					b3N0XkNvbnRyb2wgQ2VudHJl0gAuAA4ChgBK
+					gJ+AIdMAMgANAA4CiQKaAD2vEBAAgABSAowA
+					gQKOAHwATQKRApIAUACFAIMClgDmApgAhIAn
+					gBeAoIAogKGAJIASgKKAo4AVgCuAKYCkgEmA
+					pYAqrxAQApsCnABYAIkCnwKgAqEAiQBYAqQC
+					pQCOAFgCqAKpAI6ApoCsgByAMoCtgK+AsIAy
+					gByAsYCygD+AHICzgLSAP4AgV0FYTW9kYWxf
+					EBFBWEFjdGl2YXRpb25Qb2ludFZBWE1haW5c
+					QVhGdWxsU2NyZWVuW0FYTWluaW1pemVkXxAR
+					QVhSb2xlRGVzY3JpcHRpb27TADIADQAOArMC
+					tgA9ogCrAKyANYA2ogK3AriAp4CpgCDTADIA
+					DQAOArsCvgA9ogC1ALaAOIA5ogK/AKCAqIAw
+					gCAjQJ0UAAAAAADTADIADQAOAsQCxwA9ogCc
+					AJ2ALYAuogLIAsmAqoCrgCAjQH/gAAAAAAAj
+					QImIAAAAAAAQA9MAMgANAA4CzwLSAD2iALUA
+					toA4gDmiALkC1IA7gK6AICNAloQAAAAAANMA
+					MgANAA4C2ALbAD2iAJwAnYAtgC6iAsgCyYCq
+					gKuAIFhBWFdpbmRvd15Db250cm9sIENlbnRy
+					ZdMAMgANAA4C4gLlAD2iALUAtoA4gDmiAr8A
+					oICogDCAIF5BWFN5c3RlbURpYWxvZ18QD3N5
+					c3RlbSBkaWFsb2d1ZdIALgAOAuwASoC2gCHT
+					ADIADQAOAu8C+gA9qgBNAHwC8gLzAIAAgQBS
+					AIMAhACFgBKAJIC3gLiAJ4AogBeAKYAqgCuq
+					AvsC/ACJAv4C/wBYAwEAWwCOAwSAuYC6gDKA
+					vYC+gByAw4AfgD+AxIAgW0FYSXNFbGVtZW50
+					XxARQVhSb2xlRGVzY3JpcHRpb25cQVhTY3Jv
+					bGxBcmVh0wAyAA0ADgMKAw0APaIAnACdgC2A
+					LqIDDgMPgLuAvIAgI0ByoAAAAAAAI0B+cAAA
+					AAAAW3Njcm9sbCBhcmVh0wAyAA0ADgMVAxgA
+					PaIAqwCsgDWANqIDGQMagL+AwoAg0wAyAA0A
+					DgMdAyAAPaIAtQC2gDiAOaIDIQMigMCAwYAg
+					I0CdfAAAAAAAI0BZAAAAAAAA0wAyAA0ADgMn
+					AyoAPaIAnACdgC2ALqIDDgMPgLuAvIAgEBHT
+					ADIADQAOAzADMwA9ogC1ALaAOIA5ogMhAyKA
+					wIDBgCDSAC4ADgM4AEqAxoAh0wAyAA0ADgM7
+					A0kAPa0DPAB+AIAAUgB8AE0AUADgAIUAgwNG
+					AOYAhIDHgCWAJ4AXgCSAEoAVgEaAK4ApgMiA
+					SYAqrQNKAIkDTACOA04DTwNQAFsDUgNTA1QD
+					VQCNgMmAMoDKgD+A0YDSgNOAH4DUgNWA1oDX
+					gD6AIFxBWElkZW50aWZpZXJfEBFBWFJvbGVE
+					ZXNjcmlwdGlvbm8QHwBzAG8AdQBuAGQALQBk
+					AGUAdgBpAGMAZQAtAEsAbABhAHMgGQBzACAA
+					QQBpAHIAUABvAGQAcwAgAE0AYQB40wAyAA0A
+					DgNcA18APaIAqwCsgDWANqIDYANhgMuAzoAg
+					0wAyAA0ADgNkA2cAPaIAtQC2gDiAOaIDaANp
+					gMyAzYAgI0CdkAAAAAAAI0B0UAAAAAAA0wAy
+					AA0ADgNuA3EAPaIAnACdgC2ALqIDcgNzgM+A
+					0IAgI0ByAAAAAAAAI0BAAAAAAAAA0wAyAA0A
+					DgN4A3sAPaIAnACdgC2ALqIDcgNzgM+A0IAg
+					WkFYQ2hlY2tCb3hfEBJOb2lzZSBDYW5jZWxs
+					YXRpb27TADIADQAOA4IDhQA9ogC1ALaAOIA5
+					ogNoA2mAzIDNgCAQCF10b2dnbGUgYnV0dG9u
+					WEFYVG9nZ2xlTxEClAAAAAIAAUA1AAAAAwAB
+					QDYAAAAAAAFANwAAAAEAAsA4RPlMYEOrSAAA
+					AsA5QwVjAEOfSAAAAQA6VjLkLgAAAvgAAUA7
+					AAAAAAABQDMAAAHjAAFANAAFfS8AAQCpP363
+					CAAAABIAAUBqAAADMQABQGsAAAWgAYwQbQi3
+					fj8SAAAAqgkAAAEAAAAAAAAAAAAAAAQAAAAg
+					AAAAEQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					AQAAACAAAAACAAAAAQAAAAEAAAABAAAAAAAB
+					AAEBAAABAAAAmAAAAAEAAAABAAAAAQAAAAD/
+					GAAAAAAAfAAAAA4AAAAAAAAAAAAAAAi3fj8S
+					AAAAAAAAAAAAAACqCQAAAQAAAAAAAAAAAAcA
+					AQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACY
+					AAAAAQAAAAEAAAABAAAAAP8YAAAAAAB8AAAA
+					AQAAAAAAAAAAAAAACLd+PxIAAAAAAAAAAAAA
+					AKoJAAABAAAAAAAAAAAA8QABAAAA/wADAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAABQAcAAAADAAFA
+					AAAAAPEAAUABAAAAAQABQAIAAAD/AAFAAwAA
+					AAAAAUAEAAAAAAABQAUAAAAAAAFABgAAAAAA
+					AUBZAAAAYwABQFoAAACQAAFAWwAAAeMAAUBc
+					AAAB4wABQGwAAAABAAFAPAAAAPEAAQA9AAAA
+					AAAAAAAAAQA+AAAAAAAAAAAAAUA/AAAAAF8Q
+					PiVAIG9uIGNoZWNrYm94IFxVMjAxQ05vaXNl
+					IENhbmNlbGxhdGlvblxVMjAxRCBpbiBzY3Jv
+					bGwgYXJlYSAx0gAuAA4DjwAwgNuAZdMAMgAN
+					AA4DkgOXAD2kADQANQA2ADeAC4AMgA2ADqQD
+					mAOZA5oDm4DcgQEFgQEGgQEHgCDSAA0ADgOe
+					AEekA58DoAOhA6KA3YDjgPGA+oBi0gAuAA4D
+					pQBKgN6AIdMAMgANAA4DqAOxAD2oAE0ATgBP
+					AFADrQBSA68DsIASgBOAFIAVgN+AF4DggOGo
+					AFYAVwBYA7UAWgF+AFgAiYAagBuAHIDigB6A
+					b4AcgDKAIF8QEUFYUm9sZURlc2NyaXB0aW9u
+					XxAXQVhFbmhhbmNlZFVzZXJJbnRlcmZhY2Vb
+					QVhGcm9udG1vc3ReQ29udHJvbCBDZW50cmXS
+					AC4ADgPAAEqA5IAh0wAyAA0ADgPDA9QAPa8Q
+					EACAAFICjACBA8gAfABNApEDzABQAIUAgwKW
+					AOYD0gCEgCeAF4CggCiA5YAkgBKAooDmgBWA
+					K4ApgKSASYDngCqvEBAD1QKcAFgAiQPZA9oC
+					oQCJAFgD3gPfAI4AWAPiA+MAjoDogKyAHIAy
+					gOuA7ICwgDKAHIDtgO6AP4AcgO+A8IA/gCBf
+					EBFBWEFjdGl2YXRpb25Qb2ludFxBWEZ1bGxT
+					Y3JlZW5fEBFBWFJvbGVEZXNjcmlwdGlvbtMA
+					MgANAA4D6gPtAD2iAKsArIA1gDaiA+4D74Dp
+					gOqAINMAMgANAA4D8gP1AD2iALUAtoA4gDmi
+					Ar8AoICogDCAINMAMgANAA4D+gP9AD2iAJwA
+					nYAtgC6iAsgCyYCqgKuAINMAMgANAA4EAgQF
+					AD2iALUAtoA4gDmiALkC1IA7gK6AINMAMgAN
+					AA4ECgQNAD2iAJwAnYAtgC6iAsgCyYCqgKuA
+					IF5Db250cm9sIENlbnRyZdMAMgANAA4EEwQW
+					AD2iALUAtoA4gDmiAr8AoICogDCAIF5BWFN5
+					c3RlbURpYWxvZ18QD3N5c3RlbSBkaWFsb2d1
+					ZdIALgAOBB0ASoDygCHTADIADQAOBCAEKwA9
+					qgBNAHwEIwQkAIAAgQBSAIMAhACFgBKAJIDz
+					gPSAJ4AogBeAKYAqgCuqAvsELQCJAv4EMABY
+					AwEAWwCOBDWAuYD1gDKAvYD2gByAw4AfgD+A
+					+YAgW0FYSXNFbGVtZW50XxARQVhSb2xlRGVz
+					Y3JpcHRpb27TADIADQAOBDoEPQA9ogCcAJ2A
+					LYAuogMOAw+Au4C8gCDTADIADQAOBEIERQA9
+					ogCrAKyANYA2ogRGBEeA94D4gCDTADIADQAO
+					BEoETQA9ogC1ALaAOIA5ogMhAyKAwIDBgCDT
+					ADIADQAOBFIEVQA9ogCcAJ2ALYAuogMOAw+A
+					u4C8gCDTADIADQAOBFoEXQA9ogC1ALaAOIA5
+					ogMhAyKAwIDBgCDSAC4ADgRiAEqA+4Ah0wAy
+					AA0ADgRlBHMAPa0EZgB+AIAAUgB8AE0AUADg
+					AIUAgwRwAOYAhID8gCWAJ4AXgCSAEoAVgEaA
+					K4ApgP2ASYAqrQR0AIkEdgCOBHgDTwR6AFsE
+					fANTA1QDVQCNgP6AMoD/gD+BAQKA0oEBA4Af
+					gQEEgNWA1oDXgD6AIFxBWElkZW50aWZpZXJf
+					EBFBWFJvbGVEZXNjcmlwdGlvbm8QHwBzAG8A
+					dQBuAGQALQBkAGUAdgBpAGMAZQAtAEsAbABh
+					AHMgGQBzACAAQQBpAHIAUABvAGQAcwAgAE0A
+					YQB40wAyAA0ADgSGBIkAPaIAqwCsgDWANqIE
+					igSLgQEAgQEBgCDTADIADQAOBI4EkQA9ogC1
+					ALaAOIA5ogNoA2mAzIDNgCDTADIADQAOBJYE
+					mQA9ogCcAJ2ALYAuogNyA3OAz4DQgCDTADIA
+					DQAOBJ4EoQA9ogCcAJ2ALYAuogNyA3OAz4DQ
+					gCBfEBJOb2lzZSBDYW5jZWxsYXRpb27TADIA
+					DQAOBKcEqgA9ogC1ALaAOIA5ogNoA2mAzIDN
+					gCBPEQKUAAAAAgABQDUAAAADAAFANgAAAAAA
+					AUA3AAAAAgACwDhE+UxgQ6tIAAACwDlDBWMA
+					Q59IAAABADpgDJuWAAAC+AABQDsAAAAAAAFA
+					MwAAAeMAAUA0AAV9LwABAKk/vDahAAAAEgAB
+					QGoAAAMxAAFAawAABaABjBBtoTa8PxIAAACq
+					CQAAAQAAAAAAAAAAAAAABAAAACAAAAARAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA
+					AAIAAAABAAAAAQAAAAAAAAAAAAAAAQEAAAAA
+					AACYAAAAAQAAAAEAAAABAAAAAP8YAAAAAAB8
+					AAAADgAAAAAAAAAAAAAAoTa8PxIAAAAAAAAA
+					AAAAAKoJAAABAAAAAAAAAAAABwABAAAAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAJgAAAABAAAA
+					AQAAAAEAAAAA/xgAAAAAAHwAAAACAAAAAAAA
+					AAAAAAChNrw/EgAAAAAAAAAAAAAAqgkAAAEA
+					AAAAAAAAAADxAAEAAAAAAAMAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					AAAAAAAAAAAAAAFABwAAAAMAAUAAAAAA8QAB
+					QAEAAAABAAFAAgAAAAAAAUADAAAAAAABQAQA
+					AAAAAAFABQAAAAAAAUAGAAAAAAABQFkAAABj
+					AAFAWgAAAJAAAUBbAAAB4wABQFwAAAHjAAFA
+					bAAAAAAAAUA8AAAA8QABAD0AAAAAAAAAAAAB
+					AD4AAAAAAAAAAAABQD8AAAAAXkNvbnRyb2wg
+					Q2VudHJlXxA+JUAgb24gY2hlY2tib3ggXFUy
+					MDFDTm9pc2UgQ2FuY2VsbGF0aW9uXFUyMDFE
+					IGluIHNjcm9sbCBhcmVhIDEACAAZACIALAAx
+					ADoAPwBRAFYAWwBdAnECdwKAAosCkgKXApkC
+					mwKdAr4CxwLbAuMC6QL1AwcDEgMUAxYDGAMa
+					AxwDHgMgAyIDMAM/A1oDYwNsA3UDegN8A34D
+					gAOJA5QDlgOYA6UDrQO2A7gDugO8A74DxwPJ
+					A8sDzQPPA9ED3wPrA/cEEQQaBCEEIwQlBCcE
+					KQQyBDQENgRDBFQEVgRYBFoEXAReBGAEYgRk
+					BHUEdwR5BHsEfQR/BIEEgwSFBIcEjgSjBKwE
+					tATIBOIE/AUIBRYFMAUxBUAFTAVOBVcFYgVr
+					BXgFfQWGBY8FrwW0BdQF3QXfBeEF7gYDBgUG
+					BwYJBgsGDQYPBhEGEwYVBhcGLAYuBjAGMgY0
+					BjYGOAY6BjwGPgZABkIGSQZTBmcGbwZ5BosG
+					oQasBrkGvgbABsIGxwbJBssGzQbTBtoG4wbs
+					BvYG9wcABw0HEgcUBxYHGwcdBx8HIQcoBy0H
+					Ogc/B0EHQwdIB0oHTAdOB1AHUgdbB2QHcQd2
+					B3gHegd/B4EHgweFB44HkAeSB58HpAemB6gH
+					rQevB7EHswe8B74HwAfNB/IH9Af2B/gH+gf8
+					B/4IAAgCCAQIBggICAoIDAgOCBAIEggUCDkI
+					Owg9CD8IQQhDCEUIRwhJCEsITQhPCFEIUwhV
+					CFcIWQhbCF0IagiECJgIoAi0CL8IyQjWCPII
+					/wkECQYJCAkNCQ8JEQkTCRwJIwklCTIJNwk5
+					CTsJQAlCCUQJRglTCVgJWglcCWEJYwllCWcJ
+					cAl5CYYJiwmNCY8JlAmWCZgJmgmjCawJrgm7
+					CcAJwgnECckJywnNCc8J3AnhCeMJ5QnqCewJ
+					7gnwCfkKAgoQChkKJgorCi0KLwo0CjYKOAo6
+					CkAKSwpXCmAKbwp2Cn4NFg1MDVUNYw1qDXgN
+					gQ2KDYwNjg2bDaQNpg2oDaoNrA21DbcNuQ27
+					Db0Nvw3IDc8N0Q3TDdUN1w3gDeIN5A3xDgIO
+					BA4GDggOCg4MDg4OEA4SDiMOJQ4nDikOKw4t
+					Di8OMQ4zDjUOSQ5jDm8Ofg6ADokOiw6NDpoO
+					rw6xDrMOtQ63DrkOuw69Dr8OwQ7DDtgO2g7c
+					Dt4O4A7iDuQO5g7oDuoO7A7uDwIPDw8UDxYP
+					GA8dDx8PIQ8jDywPOQ8+D0APQg9HD0kPSw9N
+					D1oPXw9hD2MPaA9qD2wPbg97D4APgg+ED4kP
+					iw+ND48PmA+lD6oPrA+uD7MPtQ+3D7kPwg/E
+					D8YP0w/4D/oP/A/+EAAQAhAEEAYQCBAKEAwQ
+					DhAQEBIQFBAWEBgQGhA/EEEQQxBFEEcQSRBL
+					EE0QTxBREFMQVRBXEFkQWxBdEF8QYRBjEHAQ
+					ihCeELIQvxDbEOgQ7RDvEPEQ9hD4EPoQ/BEJ
+					EQ4REBESERcRGREbER0RKhEvETERMxE4EToR
+					PBE+EUsRUBFSEVQRWRFbEV0RXxFsEXERcxF1
+					EXoRfBF+EYARjRGSEZQRlhGbEZ0RnxGhEaoR
+					txG8Eb4RwBHFEccRyRHLEdcUbxR+FLQUvRTC
+					FMsU2hTfFO4VDxUjFS8VQRVMFU4VUBVSFVQV
+					VhVYFVoVXBVrFbwVxRXOFdMV1RXXFdkV4hXk
+					FeYV8xX8Ff4WABYCFgQWDRYPFhEWExYVFhcW
+					IBYpFisWLRYvFjEWMxY8Fj4WQBZNFl4WYBZi
+					FmQWZhZoFmoWbBZuFn8WgRaDFoUWhxaJFosW
+					jRaPFpEWpRa/FssW2hbjFuUW5xb0FxcXGRcb
+					Fx0XHxchFyMXJRcnFykXKxctFy8XMRczFzUX
+					NxdaF1wXXhdgF2IXZBdmF2gXahdsF24XcBdy
+					F3QXdhd4F3oXfBeEF5gXnxesF7gXzBfZF94X
+					4BfiF+cX6RfrF+0X+hf/GAEYAxgIGAoYDBgO
+					GBcYJBgpGCsYLRgyGDQYNhg4GEEYShhMGFkY
+					XhhgGGIYZxhpGGsYbRh2GIMYiBiKGIwYkRiT
+					GJUYlxigGK8YvBjBGMMYxRjKGMwYzhjQGN8Y
+					8Rj6GPwY/hkLGSAZIhkkGSYZKBkqGSwZLhkw
+					GTIZNBlJGUsZTRlPGVEZUxlVGVcZWRlbGV0Z
+					XxlrGX8ZjBmZGZ4ZoBmiGacZqRmrGa0Zthm/
+					GcsZ2BndGd8Z4RnmGegZ6hnsGfkZ/hoAGgIa
+					BxoJGgsaDRoWGh8aLBoxGjMaNRo6GjwaPhpA
+					GkIaTxpUGlYaWBpdGl8aYRpjGmwabhpwGn0a
+					mBqaGpwanhqgGqIapBqmGqgaqhqsGq4asBqy
+					Gs0azxrRGtMa1RrXGtka2xrdGt8a4RrjGuUa
+					5xrpGvYbChtLG1gbXRtfG2EbZhtoG2obbBt5
+					G34bgBuCG4cbiRuLG40blhufG6wbsRuzG7Ub
+					uhu8G74bwBvJG9Ib3xvkG+Yb6BvtG+8b8Rvz
+					G/4cExwgHCUcJxwpHC4cMBwyHDQcNhxEHE0e
+					5R8mHy8fMR8zH0AfSR9LH00fTx9RH1ofXB9f
+					H2IfZR9nH3AfeR97H30ffx+BH4MfjB+OH5Af
+					nR+uH7Afsh+0H7YfuB+6H7wfvh/PH9Ef0x/V
+					H9cf2R/bH90f3x/hH/UgDyAbICogMyA1IDcg
+					RCBnIGkgayBtIG8gcSBzIHUgdyB5IHsgfSB/
+					IIEggyCFIIcgqiCsIK4gsCCyILQgtiC4ILog
+					vCC+IMAgwiDEIMYgyCDKIMwg4CDtIQEhDiET
+					IRUhFyEcIR4hICEiIS8hNCE2ITghPSE/IUEh
+					QyFQIVUhVyFZIV4hYCFiIWQhcSF2IXgheiF/
+					IYEhgyGFIZIhlyGZIZshoCGiIaQhpiG1IcIh
+					xyHJIcsh0CHSIdQh1iHlIfciACICIgQiESIm
+					IigiKiIsIi4iMCIyIjQiNiI4IjoiTyJRIlMi
+					VSJXIlkiWyJdIl8iYSJjImUicSKFIpIilyKZ
+					IpsioCKiIqQipiKzIrgiuiK8IsEiwyLFIsci
+					1CLZItsi3SLiIuQi5iLoIvUi+iL8Iv4jAyMF
+					IwcjCSMWIxsjHSMfIyQjJiMoIyojMyM1Izcj
+					RCNfI2EjYyNlI2cjaSNrI20jbyNxI3MjdSN3
+					I3kjlCOWI5gjmiOcI58joSOkI6YjqSOrI60j
+					ryOxI7MjwCPUJBUkIiQnJCkkKyQwJDMkNiQ4
+					JEUkSiRMJE4kUyRVJFckWSRmJGskbSRvJHQk
+					diR4JHokhySMJI4kkCSVJJckmSSbJLAkvSTC
+					JMQkxiTLJM0kzyTRJ2kneAAAAAAAAAICAAAA
+					AAAABLEAAAAAAAAAAAAAAAAAACe5
+					</data>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.WatchMeDo</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>AMWatchMeDoAction</string>
+				<key>InputUUID</key>
+				<string>3C6EA588-0446-48D6-8C32-89ECB655444D</string>
+				<key>Keywords</key>
+				<array>
+					<string>Events</string>
+					<string>Play</string>
+					<string>Record</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>A1EADE68-A128-4FF8-8EC4-5DEF548FD7B5</string>
+				<key>UUID</key>
+				<string>FB027B1F-AC4E-4BDC-9888-6F6C21D8C5A5</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<real>1000</real>
+						<key>name</key>
+						<string>timeoutCount_MAX</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+					<key>1</key>
+					<dict>
+						<key>default value</key>
+						<real>-1</real>
+						<key>name</key>
+						<string>playbackSpeed_MIN</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>1</string>
+					</dict>
+					<key>2</key>
+					<dict>
+						<key>default value</key>
+						<true/>
+						<key>name</key>
+						<string>timeoutPerEvent</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>2</string>
+					</dict>
+					<key>3</key>
+					<dict>
+						<key>default value</key>
+						<data>
+						</data>
+						<key>name</key>
+						<string>userEvents</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>3</string>
+					</dict>
+					<key>4</key>
+					<dict>
+						<key>default value</key>
+						<real>1</real>
+						<key>name</key>
+						<string>playbackSpeed_MAX</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>4</string>
+					</dict>
+					<key>5</key>
+					<dict>
+						<key>default value</key>
+						<real>0.0</real>
+						<key>name</key>
+						<string>timeoutCount_MIN</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>5</string>
+					</dict>
+					<key>6</key>
+					<dict>
+						<key>default value</key>
+						<real>2</real>
+						<key>name</key>
+						<string>timeoutCount</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>6</string>
+					</dict>
+					<key>7</key>
+					<dict>
+						<key>default value</key>
+						<real>0.0</real>
+						<key>name</key>
+						<string>playbackSpeed</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>7</string>
+					</dict>
+					<key>8</key>
+					<dict>
+						<key>default value</key>
+						<true/>
+						<key>name</key>
+						<string>timeoutIsError</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>8</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<integer>1</integer>
+				<key>location</key>
+				<string>449.000000:1165.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Watch Me Do.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 	<key>connectors</key>
-	<dict/>
+	<dict>
+		<key>19909F3B-72A1-4108-8DA9-C520E06DF3DD</key>
+		<dict>
+			<key>from</key>
+			<string>C6424F57-9A67-4361-8BDD-9ED1DB118A40 - C6424F57-9A67-4361-8BDD-9ED1DB118A40</string>
+			<key>to</key>
+			<string>FB027B1F-AC4E-4BDC-9888-6F6C21D8C5A5 - FB027B1F-AC4E-4BDC-9888-6F6C21D8C5A5</string>
+		</dict>
+	</dict>
 	<key>workflowMetaData</key>
 	<dict>
 		<key>workflowTypeIdentifier</key>
